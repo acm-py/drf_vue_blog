@@ -1,24 +1,21 @@
-# -*- coding: utf-8 -*-
-"""
--------------------------------------------------
-   File Name：     serializers
-   Description :
-   Author :       bing
-   date：          2021/7/9
--------------------------------------------------
-   Change Activity:
-                   2021/7/9:
--------------------------------------------------
-"""
-__author__ = 'bing'
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
 
+class UserDescSerializer(serializers.ModelSerializer):
+    """于文章列表中引用的嵌套序列化器"""
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+            'last_login',
+            'date_joined'
+        ]
+
+
 class UserRegisterSerializer(serializers.ModelSerializer):
-    """
-    用户登录序列化器
-    """
     url = serializers.HyperlinkedIdentityField(view_name='user-detail', lookup_field='username')
 
     class Meta:
@@ -45,33 +42,15 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         return super().update(instance, validated_data)
 
-
 class UserDetailSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = [
             'id',
             'username',
-            'lastname',
-            'firstname',
+            'last_name',
+            'first_name',
             'email',
             'last_login',
             'date_joined'
         ]
-
-
-class UserDescSerializer(serializers.ModelSerializer):
-    """
-    文章列表中引用的嵌套序列化器
-    """
-
-    class Meta:
-        model = User
-        fields = [
-            'id',
-            'username',
-            'last_login',
-            'date_joined'
-        ]
-

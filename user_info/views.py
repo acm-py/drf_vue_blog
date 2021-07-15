@@ -1,17 +1,15 @@
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
-from user_info.serializers import *
-from user_info.permissions import *
+
+from user_info.serializers import UserRegisterSerializer
+from user_info.permissions import IsSelfOrReadOnly
 from rest_framework.decorators import action
 from rest_framework.response import Response
-# Create your views here.
+from user_info.serializers import UserDetailSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    用户视图集
-    """
     queryset = User.objects.all()
     serializer_class = UserRegisterSerializer
     lookup_field = 'username'
@@ -26,7 +24,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def info(self, request, username=None):
-        queryset = User.objects.all()
+        queryset = User.objects.get(username=username)
         serializer = UserDetailSerializer(queryset, many=False)
         return Response(serializer.data)
 

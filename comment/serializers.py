@@ -1,19 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
--------------------------------------------------
-   File Name：     serializers
-   Description :
-   Author :       bing
-   date：          2021/7/9
--------------------------------------------------
-   Change Activity:
-                   2021/7/9:
--------------------------------------------------
-"""
-__author__ = 'bing'
 from rest_framework import serializers
+
+from comment.models import Comment
 from user_info.serializers import UserDescSerializer
-from comment.models import *
 
 
 class CommentChildrenSerializer(serializers.ModelSerializer):
@@ -39,6 +27,7 @@ class CommentSerializer(serializers.ModelSerializer):
     parent_id = serializers.IntegerField(write_only=True, allow_null=True, required=False)
 
     def update(self, instance, validated_data):
+        # 更新时剔除 parent 字段
         validated_data.pop('parent_id', None)
         return super().update(instance, validated_data)
 

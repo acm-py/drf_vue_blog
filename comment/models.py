@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone
-from article.models import  Article
+
+from article.models import Article
 from django.contrib.auth.models import User
-# Create your models here.
 
 
 class Comment(models.Model):
@@ -11,13 +11,13 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='comments'
     )
+
     article = models.ForeignKey(
         Article,
         on_delete=models.CASCADE,
         related_name='comments'
     )
 
-    # 多级评论
     parent = models.ForeignKey(
         'self',
         null=True,
@@ -25,6 +25,7 @@ class Comment(models.Model):
         on_delete=models.SET_NULL,
         related_name='children'
     )
+
     content = models.TextField()
     created = models.DateTimeField(default=timezone.now)
 
@@ -33,5 +34,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content[:20]
-
-

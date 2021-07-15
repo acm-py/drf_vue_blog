@@ -1,6 +1,8 @@
-import axios from "axios";
-async function authorization(){
+import axios from 'axios';
+
+async function authorization() {
     const storage = localStorage;
+
     let hasLogin = false;
     let username = storage.getItem('username.myblog');
 
@@ -8,7 +10,7 @@ async function authorization(){
     const current = (new Date()).getTime();
     const refreshToken = storage.getItem('refresh.myblog');
 
-    // 初始 token ->未过期
+    // 初始 token 未过期
     if (expiredTime > current) {
         hasLogin = true;
         console.log('authorization access')
@@ -19,7 +21,7 @@ async function authorization(){
         try {
             let response = await axios.post('/api/token/refresh/', {refresh: refreshToken});
 
-            const nextExpiredTime = Date.parse(response.headers.date) + 60000;
+            const nextExpiredTime = Date.parse(response.headers.date) + 60 * 100 * 1000;
 
             storage.setItem('access.myblog', response.data.access);
             storage.setItem('expiredTime.myblog', nextExpiredTime);
